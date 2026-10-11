@@ -6,29 +6,34 @@ from zipfile import ZipFile, ZIP_DEFLATED
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'entrega'
-PREFIX = 'Actividad4_Finanzas'
+PREFIX = 'UnidadII_Actividad3_Roles_Permisos'
 
 
 def main():
     files = [ROOT / name for name in (
         'ENTREGA.md', 'README.md', 'requirements.txt', 'schema.graphql',
-        '.env.example', '.gitignore')]
+        '.env.example', '.env.docker.example', '.gitignore', '.dockerignore', 'Dockerfile', 'compose.yaml', 'pytest.ini')]
     for directory in ('app', 'tests', 'scripts', 'docs'):
         files.extend(path for path in (ROOT / directory).rglob('*')
                      if path.is_file() and '__pycache__' not in path.parts
-                     and path.suffix in {'.py', '.md', '.graphql', '.json', '.txt', '.xml'})
+                     and path.suffix in {'.py', '.md', '.graphql', '.json', '.txt', '.xml', '.jpg', '.png', '.sql'})
     files = sorted(set(files))
     # Se comparan los secretos locales sin imprimirlos ni incorporarlos al manifiesto.
     secrets = []
-    configuration = ROOT / '.env'
-    if configuration.exists():
+    for configuration in (ROOT / '.env', ROOT / '.env.docker'):
+        if not configuration.exists():
+            continue
         for line in configuration.read_text(encoding='utf-8-sig').splitlines():
             key, _, value = line.partition('=')
-            if key.strip() in {'JWT_SECRET', 'BOOTSTRAP_KEY'} and value.strip():
+            if key.strip() in {'JWT_SECRET', 'BOOTSTRAP_KEY', 'MYSQL_PASSWORD', 'MYSQL_ROOT_PASSWORD'} and value.strip():
                 secrets.append(value.strip().strip('\"\'').encode())
     credentials = ROOT / '.demo-credentials.json'
     if credentials.exists():
         secrets.append(json.loads(credentials.read_text(encoding='utf-8'))['password'].encode())
+
+    roles_credentials = ROOT / '.roles-demo.json'
+    if roles_credentials.exists():
+        secrets.extend(value.encode() for value in json.loads(roles_credentials.read_text(encoding='utf-8')).values())
 
     payloads = {}
     for path in files:

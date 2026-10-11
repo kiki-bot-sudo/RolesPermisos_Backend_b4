@@ -40,6 +40,16 @@ input AssignConceptToAccountInput {
   conceptId: ID!
 }
 
+input AssignPermissionToRoleInput {
+  roleId: ID!
+  permissionId: ID!
+}
+
+input AssignRoleInput {
+  companyUserId: ID!
+  roleId: ID!
+}
+
 type AuthPayload {
   token: String!
   tokenType: String!
@@ -73,6 +83,13 @@ type CompanyUser {
   joinedAt: Time!
   company: Company!
   user: User!
+}
+
+type CompanyUserRole {
+  id: ID!
+  companyUser: CompanyUser!
+  role: Role!
+  isActive: Boolean!
 }
 
 type Concept {
@@ -134,6 +151,18 @@ input CreateConceptInput {
   longDescription: String
 }
 
+input CreatePermissionInput {
+  code: String!
+  name: String!
+  description: String
+}
+
+input CreateRoleInput {
+  code: String!
+  name: String!
+  description: String
+}
+
 input CreateTransactionInput {
   accountId: ID!
   conceptId: ID!
@@ -152,32 +181,65 @@ input LoginInput {
 }
 
 type Mutation {
-  createAccount(input: CreateAccountInput!): Account!
-  createConcept(input: CreateConceptInput!): Concept!
-  assignConceptToAccount(input: AssignConceptToAccountInput!): AccountConcept!
-  removeConceptFromAccount(accountId: ID!, conceptId: ID!): Boolean!
-  createTransaction(input: CreateTransactionInput!): Transaction!
-  deleteTransaction(id: ID!): Transaction!
+  createAccount(actorCompanyUserId: ID!, input: CreateAccountInput!): Account!
+  createConcept(actorCompanyUserId: ID!, input: CreateConceptInput!): Concept!
+  assignConceptToAccount(actorCompanyUserId: ID!, input: AssignConceptToAccountInput!): AccountConcept!
+  removeConceptFromAccount(actorCompanyUserId: ID!, accountId: ID!, conceptId: ID!): Boolean!
+  createTransaction(actorCompanyUserId: ID!, input: CreateTransactionInput!): Transaction!
+  deleteTransaction(actorCompanyUserId: ID!, id: ID!): Transaction!
+  createRole(actorCompanyUserId: ID!, input: CreateRoleInput!): Role!
+  deactivateRole(actorCompanyUserId: ID!, id: ID!): Role!
+  createPermission(actorCompanyUserId: ID!, input: CreatePermissionInput!): Permission!
+  assignPermissionToRole(actorCompanyUserId: ID!, input: AssignPermissionToRoleInput!): RolePermission!
+  removePermissionFromRole(actorCompanyUserId: ID!, roleId: ID!, permissionId: ID!): Boolean!
+  assignRole(actorCompanyUserId: ID!, input: AssignRoleInput!): CompanyUserRole!
   createCompany(input: CreateCompanyInput!): Company!
   updateCompany(input: UpdateCompanyInput!): Company!
   deactivateCompany(id: ID!): Company!
   createCompanyAdmin(input: CreateCompanyAdminInput!): CompanyUser!
-  createCompanyUser(input: CreateCompanyUserInput!): CompanyUser!
-  deactivateCompanyUser(id: ID!): CompanyUser!
+  createCompanyUser(actorCompanyUserId: ID!, input: CreateCompanyUserInput!): CompanyUser!
+  deactivateCompanyUser(actorCompanyUserId: ID!, id: ID!): CompanyUser!
   login(input: LoginInput!): AuthPayload!
 }
 
+type Permission {
+  id: ID!
+  code: String!
+  name: String!
+  description: String
+  isActive: Boolean!
+}
+
 type Query {
-  accounts(companyId: ID!, accountType: AccountType, activeOnly: Boolean): [Account!]!
-  concepts(companyId: ID!, conceptType: ConceptType, activeOnly: Boolean): [Concept!]!
-  accountConcepts(accountId: ID!): [AccountConcept!]!
-  transactions(accountId: ID, transactionType: TransactionType, limit: Int, offset: Int): [Transaction!]!
+  accounts(actorCompanyUserId: ID!, companyId: ID!, accountType: AccountType, activeOnly: Boolean): [Account!]!
+  concepts(actorCompanyUserId: ID!, companyId: ID!, conceptType: ConceptType, activeOnly: Boolean): [Concept!]!
+  accountConcepts(actorCompanyUserId: ID!, accountId: ID!): [AccountConcept!]!
+  transactions(actorCompanyUserId: ID!, accountId: ID, transactionType: TransactionType, limit: Int, offset: Int): [Transaction!]!
 
   """Extensión: ingresos activos menos egresos activos, sin paginación."""
-  accountBalance(accountId: ID!): Decimal!
+  accountBalance(actorCompanyUserId: ID!, accountId: ID!): Decimal!
+  roles(actorCompanyUserId: ID!, activeOnly: Boolean): [Role!]!
+  role(actorCompanyUserId: ID!, id: ID!): Role
+  permissions(actorCompanyUserId: ID!, activeOnly: Boolean): [Permission!]!
+  rolePermissions(actorCompanyUserId: ID!, roleId: ID!): [RolePermission!]!
   companies(activeOnly: Boolean): [Company!]!
   company(id: ID!): Company
-  companyUsers(companyId: ID!): [CompanyUser!]!
+  companyUsers(actorCompanyUserId: ID!, companyId: ID!): [CompanyUser!]!
+}
+
+type Role {
+  id: ID!
+  code: String!
+  name: String!
+  description: String
+  isActive: Boolean!
+}
+
+type RolePermission {
+  id: ID!
+  role: Role!
+  permission: Permission!
+  isActive: Boolean!
 }
 
 scalar Time

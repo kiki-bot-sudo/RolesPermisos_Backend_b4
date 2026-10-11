@@ -1,16 +1,16 @@
 """Tablas de la actividad 4; las anteriores se conservan sin migraciones destructivas."""
 from datetime import datetime
 from decimal import Decimal
-from sqlalchemy import Boolean, DateTime, ForeignKey, String, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import TypeDecorator
-from .db import Base
+from .db import Base, Timestamp
 from .models import now, Company, User
 
 
 class ExactDecimal(TypeDecorator):
     """SQLite NUMERIC convierte a float: TEXT conserva todos los dígitos."""
-    impl = String
+    impl = Text
     cache_ok = True
 
     def process_bind_param(self, value, dialect):
@@ -29,7 +29,7 @@ class Account(Base):
     __table_args__ = (UniqueConstraint('company_id', 'name_key', name='uq_account_name'),)
     id: Mapped[int] = mapped_column(primary_key=True)
     company_id: Mapped[int] = mapped_column(ForeignKey('companies.id'))
-    account_type: Mapped[str] = mapped_column(String)
+    account_type: Mapped[str] = mapped_column(String(20))
     name: Mapped[str] = mapped_column(String(200))
     name_key: Mapped[str] = mapped_column(String(200))
     bank_name: Mapped[str | None]
@@ -39,8 +39,8 @@ class Account(Base):
     short_description: Mapped[str | None]
     long_description: Mapped[str | None]
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=now, onupdate=now)
+    created_at: Mapped[datetime] = mapped_column(Timestamp, default=now)
+    updated_at: Mapped[datetime] = mapped_column(Timestamp, default=now, onupdate=now)
     company: Mapped[Company] = relationship()
 
 
@@ -49,14 +49,14 @@ class Concept(Base):
     __table_args__ = (UniqueConstraint('company_id', 'concept_type', 'name_key', name='uq_concept_name'),)
     id: Mapped[int] = mapped_column(primary_key=True)
     company_id: Mapped[int] = mapped_column(ForeignKey('companies.id'))
-    concept_type: Mapped[str] = mapped_column(String)
+    concept_type: Mapped[str] = mapped_column(String(20))
     name: Mapped[str] = mapped_column(String(200))
     name_key: Mapped[str] = mapped_column(String(200))
     short_description: Mapped[str | None]
     long_description: Mapped[str | None]
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=now, onupdate=now)
+    created_at: Mapped[datetime] = mapped_column(Timestamp, default=now)
+    updated_at: Mapped[datetime] = mapped_column(Timestamp, default=now, onupdate=now)
 
 
 class AccountConcept(Base):
@@ -66,7 +66,7 @@ class AccountConcept(Base):
     account_id: Mapped[int] = mapped_column(ForeignKey('accounts.id'))
     concept_id: Mapped[int] = mapped_column(ForeignKey('concepts.id'))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
+    created_at: Mapped[datetime] = mapped_column(Timestamp, default=now)
     account: Mapped[Account] = relationship()
     concept: Mapped[Concept] = relationship()
 
@@ -76,16 +76,16 @@ class Transaction(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     account_id: Mapped[int] = mapped_column(ForeignKey('accounts.id'))
     concept_id: Mapped[int] = mapped_column(ForeignKey('concepts.id'))
-    transaction_type: Mapped[str] = mapped_column(String)
+    transaction_type: Mapped[str] = mapped_column(String(20))
     amount: Mapped[Decimal] = mapped_column(ExactDecimal())
-    transaction_date: Mapped[datetime] = mapped_column(DateTime)
-    captured_at: Mapped[datetime] = mapped_column(DateTime, default=now)
+    transaction_date: Mapped[datetime] = mapped_column(Timestamp)
+    captured_at: Mapped[datetime] = mapped_column(Timestamp, default=now)
     captured_by: Mapped[int] = mapped_column(ForeignKey('users.id'))
     short_description: Mapped[str | None]
     long_description: Mapped[str | None]
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=now)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=now, onupdate=now)
+    created_at: Mapped[datetime] = mapped_column(Timestamp, default=now)
+    updated_at: Mapped[datetime] = mapped_column(Timestamp, default=now, onupdate=now)
     account: Mapped[Account] = relationship()
     concept: Mapped[Concept] = relationship()
     captured_by_user: Mapped[User] = relationship()

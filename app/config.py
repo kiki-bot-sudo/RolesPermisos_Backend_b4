@@ -20,7 +20,7 @@ class Settings:
 
     @classmethod
     def from_env(cls):
-        load_dotenv()
+        load_dotenv(os.getenv('SETTINGS_FILE', '.env'))
         return cls(os.getenv('DATABASE_URL', 'sqlite:///./app.db'),
                    os.getenv('JWT_SECRET', ''), os.getenv('BOOTSTRAP_KEY', ''),
                    int(os.getenv('JWT_EXPIRE_MINUTES', '30')))

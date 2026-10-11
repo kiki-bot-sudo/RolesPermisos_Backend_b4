@@ -129,14 +129,18 @@ def convert(kind, obj):
     return kind(**values)
 
 
-def execute(info, work):
+def execute(info, work, actor_company_user_id=None, permission=None):
     app = info.context['request'].app
     try:
         with app.state.sessions.begin() as session:
-            # Serialize SQLite writes and authorization checks, including across processes.
-            from sqlalchemy import text
-            session.execute(text('BEGIN IMMEDIATE'))
-            return work(Service(session, app.state.settings, info.context['request'].headers))
+            from .db import lock_operation
+            lock_operation(session)
+            service = Service(session, app.state.settings, info.context['request'].headers, actor_company_user_id)
+            if permission:
+                service.require(permission)
+            result = work(service)
+            service.check_before_commit()
+            return result
     except GraphQLError:
         raise
     except IntegrityError:
@@ -146,10 +150,11 @@ def execute(info, work):
 
 
 from .finance_schema import FinanceQuery, FinanceMutation, Money
+from .access_schema import AccessQuery, AccessMutation
 
 
 @strawberry.type
-class Query(FinanceQuery):
+class Query(FinanceQuery, AccessQuery):
     @strawberry.field
     def companies(self, info: Info, active_only: Optional[bool] = strawberry.UNSET) -> list[Company]:
         return execute(info, lambda svc: [convert(Company, x) for x in svc.companies(active_only)])
@@ -159,12 +164,12 @@ class Query(FinanceQuery):
         return execute(info, lambda svc: convert(Company, svc.get_company(id)))
 
     @strawberry.field
-    def company_users(self, info: Info, company_id: strawberry.ID) -> list[CompanyUser]:
-        return execute(info, lambda svc: [convert(CompanyUser, x) for x in svc.members(company_id)])
+    def company_users(self, info: Info, actor_company_user_id: strawberry.ID, company_id: strawberry.ID) -> list[CompanyUser]:
+        return execute(info, lambda svc: [convert(CompanyUser, x) for x in svc.members(company_id)], actor_company_user_id, 'company.users.read')
 
 
 @strawberry.type
-class Mutation(FinanceMutation):
+class Mutation(FinanceMutation, AccessMutation):
     @strawberry.mutation
     def create_company(self, info: Info, input: CreateCompanyInput) -> Company:
         fields = {key: getattr(input, key) for key in input.__dataclass_fields__
@@ -186,12 +191,12 @@ class Mutation(FinanceMutation):
         return execute(info, lambda svc: convert(CompanyUser, svc.create_member(asdict(input), True)))
 
     @strawberry.mutation
-    def create_company_user(self, info: Info, input: CreateCompanyUserInput) -> CompanyUser:
-        return execute(info, lambda svc: convert(CompanyUser, svc.create_member(asdict(input), False)))
+    def create_company_user(self, info: Info, actor_company_user_id: strawberry.ID, input: CreateCompanyUserInput) -> CompanyUser:
+        return execute(info, lambda svc: convert(CompanyUser, svc.create_member(asdict(input), False)), actor_company_user_id, 'company.users.write')
 
     @strawberry.mutation
-    def deactivate_company_user(self, info: Info, id: strawberry.ID) -> CompanyUser:
-        return execute(info, lambda svc: convert(CompanyUser, svc.deactivate_member(id)))
+    def deactivate_company_user(self, info: Info, actor_company_user_id: strawberry.ID, id: strawberry.ID) -> CompanyUser:
+        return execute(info, lambda svc: convert(CompanyUser, svc.deactivate_member(id)), actor_company_user_id, 'company.users.write')
 
     @strawberry.mutation
     def login(self, info: Info, input: LoginInput) -> AuthPayload:

@@ -1,28 +1,28 @@
-# Actividad 4: Gestión de cuentas, conceptos y movimientos financieros
+# Unidad II · Actividad 3: Gestión de roles y permisos
 
-## Autor
+**Autor: Enrique Zavala**  
+**Entrega individual**
 
-**Enrique Zavala**
+Sistema General de Ingresos integrado con el trabajo anterior. Incluye los temas
+«Diseño e implementación de roles y permisos» y «Configuración de permisos para diferentes roles».
 
-Entrega individual.
+- Python, FastAPI, Strawberry GraphQL, SQLAlchemy y MySQL 8.4.
+- Docker Compose con base persistente y API en `/graphql`.
+- Cuatro roles, diez permisos y la matriz exacta de 26 relaciones.
+- Asignación de rol por membresía CompanyUser y autorización central.
+- Conservación de los modelos y reglas financieras anteriores.
+- Capturas reales, pruebas automatizadas y consultas SQL de comprobación.
 
-## Contenido de la entrega
+## Revisión
 
-- Código completo integrado con empresas, usuarios y autenticación de la actividad anterior.
-- Esquema GraphQL y dependencias con versiones comprobadas.
-- Carga reproducible de 3 cuentas, 10 conceptos, 10 relaciones y 20 movimientos.
-- Pruebas automatizadas, ejemplos de operaciones y evidencias reales.
-- README en español con instalación, configuración y ejecución.
+1. Extraer el ZIP y seguir `README.md` para generar configuración e iniciar Docker.
+2. Consultar `docs/roles-operaciones.md` para reproducir las operaciones.
+3. Revisar `docs/evidencias/unidad2/README.md` para las capturas y resultados.
 
-## Revisión del docente
+Repositorio: https://github.com/kiki-bot-sudo/sistema-general-ingresos-roles-permisos
+(privado). Se proporciona el ZIP completo para la evaluación sin acceso a la cuenta.
 
-Extraiga el ZIP en una carpeta y siga `README.md`. Comience creando el entorno
-`env`, instalando `requirements.txt` y ejecutando `app.init_config`, `app.init_db`
-y `app.seed`. La configuración y las credenciales de demostración se generan
-localmente; no se incluyen secretos, base de datos ni entornos virtuales.
+No se incluyen secretos, contraseñas reales, base de datos ni entornos virtuales.
+Los datos ficticios se generan con los comandos del README.
 
-Las evidencias y la correspondencia con los requisitos del PDF están en
-`docs/actividad4-evidencias.md`. Los ejemplos están en
-`docs/actividad4-operaciones.md`.
-
-La entrega del archivo al docente debe realizarla Enrique Zavala.
+La entrega al docente debe realizarla Enrique Zavala.

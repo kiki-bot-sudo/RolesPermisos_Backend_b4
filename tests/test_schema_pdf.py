@@ -1,30 +1,22 @@
-"""Compara el contrato público con el esquema de las páginas 3–6 del PDF."""
 from pathlib import Path
-from graphql import build_schema, lexicographic_sort_schema, print_schema
+from graphql import build_schema, print_schema, lexicographic_sort_schema, GraphQLArgument, GraphQLNonNull, GraphQLID
 from app.schema import schema
 
 
-def contract(value):
-    # El orden y las descripciones no cambian el contrato GraphQL.
-    for kind in value.type_map.values():
-        kind.description = None
-    return print_schema(lexicographic_sort_schema(value))
-
-
-def test_contrato_exacto_del_pdf():
-    expected = build_schema(Path(__file__).with_name('schema_pdf.graphql').read_text(encoding='utf-8'))
-    actual = build_schema(schema.as_str())
-    # Las operaciones de la actividad 3 deben permanecer intactas al extenderla.
-    for type_name, old in expected.type_map.items():
-        if type_name.startswith('__'):
-            continue
-        new = actual.get_type(type_name)
-        assert new is not None
-        if hasattr(old, 'fields'):
-            for field_name, field in old.fields.items():
-                assert str(new.fields[field_name].type) == str(field.type)
-                if hasattr(field, 'args'):
-                    assert {k: str(v.type) for k, v in new.fields[field_name].args.items()} == {k: str(v.type) for k, v in field.args.items()}
-            if type_name not in ('Query', 'Mutation'):
-                assert set(new.fields) == set(old.fields)
-    assert Path('schema.graphql').read_text(encoding='utf-8').strip() == schema.as_str().strip()
+def test_complete_contract_from_three_pdfs():
+    expected=build_schema('\n'.join(Path('tests',p).read_text(encoding='utf-8-sig') for p in ('schema_pdf.graphql','finance_pdf.graphql','access_pdf.graphql')))
+    protected={
+        'Query':('companyUsers','accounts','concepts','accountConcepts','transactions','accountBalance','roles','role','permissions','rolePermissions'),
+        'Mutation':('createCompanyUser','deactivateCompanyUser','createAccount','createConcept','assignConceptToAccount','removeConceptFromAccount','createTransaction','deleteTransaction','createRole','deactivateRole','createPermission','assignPermissionToRole','removePermissionFromRole','assignRole'),
+    }
+    for kind,fields in protected.items():
+        for name in fields:
+            expected.get_type(kind).fields[name].args['actorCompanyUserId']=GraphQLArgument(GraphQLNonNull(GraphQLID))
+    actual=build_schema(schema.as_str())
+    for contract in (expected,actual):
+        for kind in contract.type_map.values():
+            kind.description=None
+            for field in getattr(kind,'fields',{}).values():
+                field.description=None
+    assert print_schema(lexicographic_sort_schema(actual))==print_schema(lexicographic_sort_schema(expected))
+    assert Path('schema.graphql').read_text(encoding='utf-8').strip()==schema.as_str().strip()

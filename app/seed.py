@@ -6,7 +6,8 @@ from pathlib import Path
 from decimal import Decimal
 from sqlalchemy import select, text, func
 from .config import Settings
-from .db import Base, database
+from .db import Base, database, lock_operation
+from .access import initialize
 from . import models as m
 from .finance_service import FinanceService
 
@@ -28,18 +29,19 @@ def counts(session, cid):
 
 def seed(settings, password):
     engine, sessions = database(settings.database_url)
-    Base.metadata.create_all(engine)
+    initialize(engine, sessions)
     try:
         with sessions.begin() as db:
-            db.execute(text('BEGIN IMMEDIATE'))
+            lock_operation(db)
             svc = FinanceService(db, settings, {'x-bootstrap-key': settings.bootstrap_key})
             company = db.scalar(select(m.Company).where(m.Company.tax_id == DEMO_TAX_ID))
             if company is None:
                 company = svc.create_company({'name': 'Empresa ficticia Actividad 4', 'tax_id': DEMO_TAX_ID})
                 svc.create_member({'company_id':company.id,'name':'Usuario de demostración',
                                    'email':DEMO_EMAIL,'password':password}, True)
-            token, _ = svc.login({'email':DEMO_EMAIL,'password':password})
+            token, user = svc.login({'email':DEMO_EMAIL,'password':password})
             svc.headers = {'authorization':'Bearer '+token}
+            svc.actor_company_user_id = db.scalar(select(m.CompanyUser.id).where(m.CompanyUser.user_id == user.id, m.CompanyUser.company_id == company.id))
             accounts = []
             for label, kind in [('Caja de demostración','CASH'), ('Banco de demostración','DEBIT'), ('Ahorro de demostración','SAVINGS')]:
                 obj = db.scalar(select(m.Account).where(m.Account.company_id==company.id, m.Account.name_key==label.casefold()))

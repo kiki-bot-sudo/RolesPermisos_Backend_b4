@@ -39,8 +39,22 @@ def email(value):
 
 
 class Service:
-    def __init__(self, session, settings, headers):
+    def __init__(self, session, settings, headers, actor_company_user_id=None):
         self.db, self.settings, self.headers = session, settings, headers
+        self.actor_company_user_id = actor_company_user_id
+        self.required_permissions = set()
+
+    def require(self, code):
+        from .access import exigir_permiso
+        if self.actor_company_user_id is None:
+            fail('Se requiere actorCompanyUserId.', 'FORBIDDEN')
+        exigir_permiso(self.db, self.actor_company_user_id, code)
+        self.required_permissions.add(code)
+
+    def check_before_commit(self):
+        from .access import exigir_permiso
+        for code in sorted(self.required_permissions):
+            exigir_permiso(self.db, self.actor_company_user_id, code)
 
     def bootstrap(self):
         supplied = self.headers.get('x-bootstrap-key', '')
@@ -48,6 +62,9 @@ class Service:
             fail('Se requiere la clave de inicialización.', 'FORBIDDEN')
 
     def actor(self):
+        if self.actor_company_user_id is not None:
+            from .access import membership
+            return membership(self.db, self.actor_company_user_id).user
         auth = self.headers.get('authorization', '')
         try:
             scheme, token = auth.split(' ', 1)
@@ -64,11 +81,10 @@ class Service:
         return user
 
     def admin(self, company_id):
-        user = self.actor()
-        member = self.db.scalar(select(m.CompanyUser).where(
-            m.CompanyUser.company_id == company_id, m.CompanyUser.user_id == user.id,
-            m.CompanyUser.is_admin.is_(True), m.CompanyUser.is_active.is_(True)))
-        if not member or not member.company.is_active:
+        from .access import membership
+        self.require('company.users.write')
+        member = membership(self.db, self.actor_company_user_id)
+        if member.company_id != company_id:
             fail('No tienes autorización en esta empresa.', 'FORBIDDEN')
         return member
 
@@ -142,11 +158,16 @@ class Service:
         member = m.CompanyUser(company=company, user=user, is_admin=admin)
         self.db.add(member)
         self.db.flush()
+        from .access import assign, role_by_code
+        assign(self.db, member, role_by_code(self.db, 'ADMINISTRADOR' if admin else 'CONSULTA'))
         return member
 
     def members(self, value):
         cid = identifier(value)
-        self.admin(cid)
+        from .access import membership
+        self.require('company.users.read')
+        if membership(self.db, self.actor_company_user_id).company_id != cid:
+            fail('No tienes autorización en esta empresa.', 'FORBIDDEN')
         return list(self.db.scalars(select(m.CompanyUser).where(
             m.CompanyUser.company_id == cid).order_by(m.CompanyUser.id)))
 
