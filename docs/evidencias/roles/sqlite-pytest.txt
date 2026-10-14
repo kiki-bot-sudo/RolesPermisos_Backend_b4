@@ -1,0 +1,73 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.14, pytest-8.3.5, pluggy-1.6.0 -- C:\Users\enriq\OneDrive\Escritorio\respaldo-antes-roles-20261010-161713\codigo\env\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\enriq\OneDrive\Escritorio\respaldo-antes-roles-20261010-161713\codigo
+plugins: anyio-4.15.1
+collecting ... collected 57 items
+
+tests/test_finance.py::test_finance_pdf_contract PASSED                  [  1%]
+tests/test_finance.py::test_catalogs_filters_duplicates PASSED           [  3%]
+tests/test_finance.py::test_relation_lifecycle_constraints PASSED        [  5%]
+tests/test_finance.py::test_invalid_amount[0] PASSED                     [  7%]
+tests/test_finance.py::test_invalid_amount[-1] PASSED                    [  8%]
+tests/test_finance.py::test_invalid_amount[-0.001] PASSED                [ 10%]
+tests/test_finance.py::test_invalid_references_and_type[extra0-NOT_FOUND] PASSED [ 12%]
+tests/test_finance.py::test_invalid_references_and_type[extra1-NOT_FOUND] PASSED [ 14%]
+tests/test_finance.py::test_invalid_references_and_type[extra2-BAD_INPUT] PASSED [ 15%]
+tests/test_finance.py::test_invalid_references_and_type[extra3-BAD_INPUT] PASSED [ 17%]
+tests/test_finance.py::test_unassigned_concept_and_inactive PASSED       [ 19%]
+tests/test_finance.py::test_transactions_precision_dates_pagination_deletion PASSED [ 21%]
+tests/test_finance.py::test_all_financial_operations_require_authentication PASSED [ 22%]
+tests/test_finance.py::test_cross_company_isolation_and_normal_user PASSED [ 24%]
+tests/test_finance.py::test_scalar_validation_and_no_impersonation[extra0] PASSED [ 26%]
+tests/test_finance.py::test_scalar_validation_and_no_impersonation[extra1] PASSED [ 28%]
+tests/test_finance.py::test_scalar_validation_and_no_impersonation[extra2] PASSED [ 29%]
+tests/test_finance.py::test_scalar_validation_and_no_impersonation[extra3] PASSED [ 31%]
+tests/test_finance.py::test_scalar_validation_and_no_impersonation[extra4] PASSED [ 33%]
+tests/test_finance.py::test_scalar_validation_and_no_impersonation[extra5] PASSED [ 35%]
+tests/test_finance.py::test_scalar_validation_and_no_impersonation[extra6] PASSED [ 36%]
+tests/test_finance.py::test_scalar_validation_and_no_impersonation[extra7] PASSED [ 38%]
+tests/test_finance.py::test_scalar_validation_and_no_impersonation[extra8] PASSED [ 40%]
+tests/test_finance.py::test_finance_rollback PASSED                      [ 42%]
+tests/test_finance.py::test_seed_repeatable_and_graphql_data PASSED      [ 43%]
+tests/test_graphql.py::test_company_crud_filter_null_dates PASSED        [ 45%]
+tests/test_graphql.py::test_invalid_company[fields0] PASSED              [ 47%]
+tests/test_graphql.py::test_invalid_company[fields1] PASSED              [ 49%]
+tests/test_graphql.py::test_invalid_company[fields2] PASSED              [ 50%]
+tests/test_graphql.py::test_invalid_update[fields0] PASSED               [ 52%]
+tests/test_graphql.py::test_invalid_update[fields1] PASSED               [ 54%]
+tests/test_graphql.py::test_invalid_update[fields2] PASSED               [ 56%]
+tests/test_graphql.py::test_admin_users_duplicates_and_transaction PASSED [ 57%]
+tests/test_graphql.py::test_login_and_tokens PASSED                      [ 59%]
+tests/test_graphql.py::test_authorization_and_tenant_isolation PASSED    [ 61%]
+tests/test_graphql.py::test_inactive_states PASSED                       [ 63%]
+tests/test_graphql.py::test_concurrent_admin_and_db_constraints PASSED   [ 64%]
+tests/test_graphql.py::test_schema_no_passwords_and_scalars PASSED       [ 66%]
+tests/test_graphql.py::test_graphql_transaction_rolls_back_partial_registration PASSED [ 68%]
+tests/test_graphql.py::test_many_to_many_and_company_specific_inactivation PASSED [ 70%]
+tests/test_graphql.py::test_invalid_ids_and_signed_token PASSED          [ 71%]
+tests/test_roles.py::test_initial_matrix_and_admin_membership PASSED     [ 73%]
+tests/test_roles.py::test_role_change_applies_to_two_people_and_soft_revoke PASSED [ 75%]
+tests/test_roles.py::test_pedro_changes_role_without_changing_other_lists PASSED [ 77%]
+tests/test_roles.py::test_only_roles_write_changes_configuration PASSED  [ 78%]
+tests/test_roles.py::test_actor_cannot_impersonate_admin_or_bypass_jwt PASSED [ 80%]
+tests/test_roles.py::test_roles_cannot_cross_companies PASSED            [ 82%]
+tests/test_roles.py::test_actor_selects_one_of_users_own_companies PASSED [ 84%]
+tests/test_roles.py::test_read_and_write_are_independent_and_no_admin_bypass PASSED [ 85%]
+tests/test_roles.py::test_restart_does_not_duplicate_or_restore_revoked_permissions PASSED [ 87%]
+tests/test_roles.py::test_one_active_role_even_concurrent_and_at_database_level PASSED [ 89%]
+tests/test_roles.py::test_roles_seed_repeatable_preserves_changes PASSED [ 91%]
+tests/test_roles.py::test_each_permission_protects_its_operation[Ana-ADMINISTRADOR] PASSED [ 92%]
+tests/test_roles.py::test_each_permission_protects_its_operation[Luis-CONTADOR] PASSED [ 94%]
+tests/test_roles.py::test_each_permission_protects_its_operation[Mar\xeda-CAPTURISTA] PASSED [ 96%]
+tests/test_roles.py::test_each_permission_protects_its_operation[Pedro-CONSULTA] PASSED [ 98%]
+tests/test_schema_pdf.py::test_contrato_exacto_del_pdf PASSED            [100%]
+
+============================== warnings summary ===============================
+env\Lib\site-packages\starlette\testclient.py:37
+  C:\Users\enriq\OneDrive\Escritorio\respaldo-antes-roles-20261010-161713\codigo\env\Lib\site-packages\starlette\testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\enriq\OneDrive\Escritorio\respaldo-antes-roles-20261010-161713\codigo\docs\evidencias\roles\sqlite-junit.xml -
+======================= 57 passed, 1 warning in 35.94s ========================

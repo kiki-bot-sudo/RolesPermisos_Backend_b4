@@ -1,0 +1,31 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.14, pytest-8.3.5, pluggy-1.6.0 -- C:\Users\enriq\OneDrive\Escritorio\respaldo-antes-roles-20261010-161713\codigo\env\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\enriq\OneDrive\Escritorio\respaldo-antes-roles-20261010-161713\codigo
+plugins: anyio-4.15.1
+collecting ... collected 15 items
+
+tests/test_roles.py::test_initial_matrix_and_admin_membership PASSED     [  6%]
+tests/test_roles.py::test_role_change_applies_to_two_people_and_soft_revoke PASSED [ 13%]
+tests/test_roles.py::test_pedro_changes_role_without_changing_other_lists PASSED [ 20%]
+tests/test_roles.py::test_only_roles_write_changes_configuration PASSED  [ 26%]
+tests/test_roles.py::test_actor_cannot_impersonate_admin_or_bypass_jwt PASSED [ 33%]
+tests/test_roles.py::test_roles_cannot_cross_companies PASSED            [ 40%]
+tests/test_roles.py::test_actor_selects_one_of_users_own_companies PASSED [ 46%]
+tests/test_roles.py::test_read_and_write_are_independent_and_no_admin_bypass PASSED [ 53%]
+tests/test_roles.py::test_restart_does_not_duplicate_or_restore_revoked_permissions PASSED [ 60%]
+tests/test_roles.py::test_one_active_role_even_concurrent_and_at_database_level PASSED [ 66%]
+tests/test_roles.py::test_roles_seed_repeatable_preserves_changes PASSED [ 73%]
+tests/test_roles.py::test_each_permission_protects_its_operation[Ana-ADMINISTRADOR] PASSED [ 80%]
+tests/test_roles.py::test_each_permission_protects_its_operation[Luis-CONTADOR] PASSED [ 86%]
+tests/test_roles.py::test_each_permission_protects_its_operation[Mar\xeda-CAPTURISTA] PASSED [ 93%]
+tests/test_roles.py::test_each_permission_protects_its_operation[Pedro-CONSULTA] PASSED [100%]
+
+============================== warnings summary ===============================
+env\Lib\site-packages\starlette\testclient.py:37
+  C:\Users\enriq\OneDrive\Escritorio\respaldo-antes-roles-20261010-161713\codigo\env\Lib\site-packages\starlette\testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\enriq\OneDrive\Escritorio\respaldo-antes-roles-20261010-161713\codigo\docs\evidencias\roles\mysql-junit.xml -
+======================= 15 passed, 1 warning in 39.55s ========================

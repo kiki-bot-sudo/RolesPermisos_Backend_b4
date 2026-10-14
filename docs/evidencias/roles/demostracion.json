@@ -1,0 +1,1388 @@
+{
+  "activity": "Unidad II - Actividad 4",
+  "executed_at": "2026-10-14T23:00:21.217187+00:00",
+  "database": "mysql",
+  "endpoint": "http://127.0.0.1:8008/graphql",
+  "companyId": "1",
+  "checks": 28,
+  "status": "PASS",
+  "events": [
+    {
+      "title": "00 Preparar el puesto inicial de Pedro",
+      "rule": "La demostración comienza con Pedro como CONSULTA.",
+      "actor": "Ana",
+      "query": "mutation ($u: ID!, $r: ID!) {\n  assignRole(input: {companyUserId: $u, roleId: $r}) {\n    id\n    isActive\n    role {\n      code\n    }\n  }\n}",
+      "variables": {
+        "u": "5",
+        "r": "4"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "assignRole": {
+            "id": "7",
+            "isActive": true,
+            "role": {
+              "code": "CONSULTA"
+            }
+          }
+        }
+      },
+      "screenshot": "capturas/01-00-preparar-el-puesto-inicial-de-pedro.png"
+    },
+    {
+      "title": "01 Catálogos",
+      "rule": "La empresa tiene cuatro roles y diez permisos.",
+      "actor": "Ana",
+      "query": "query ($c: ID!) {\n  roles(companyId: $c) {\n    id\n    code\n  }\n  permissions(companyId: $c) {\n    id\n    code\n  }\n}",
+      "variables": {
+        "c": "1"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "roles": [
+            {
+              "id": "1",
+              "code": "ADMINISTRADOR"
+            },
+            {
+              "id": "3",
+              "code": "CAPTURISTA"
+            },
+            {
+              "id": "4",
+              "code": "CONSULTA"
+            },
+            {
+              "id": "2",
+              "code": "CONTADOR"
+            }
+          ],
+          "permissions": [
+            {
+              "id": "3",
+              "code": "accounts.read"
+            },
+            {
+              "id": "4",
+              "code": "accounts.write"
+            },
+            {
+              "id": "1",
+              "code": "company.users.read"
+            },
+            {
+              "id": "2",
+              "code": "company.users.write"
+            },
+            {
+              "id": "5",
+              "code": "concepts.read"
+            },
+            {
+              "id": "6",
+              "code": "concepts.write"
+            },
+            {
+              "id": "9",
+              "code": "roles.read"
+            },
+            {
+              "id": "10",
+              "code": "roles.write"
+            },
+            {
+              "id": "7",
+              "code": "transactions.read"
+            },
+            {
+              "id": "8",
+              "code": "transactions.write"
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/02-01-catalogos.png"
+    },
+    {
+      "title": "02 Configuración inicial ADMINISTRADOR",
+      "rule": "Lista vigente del rol ADMINISTRADOR.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "1"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "1",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "2",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.write"
+              }
+            },
+            {
+              "id": "3",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.read"
+              }
+            },
+            {
+              "id": "4",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.write"
+              }
+            },
+            {
+              "id": "5",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "6",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.write"
+              }
+            },
+            {
+              "id": "7",
+              "isActive": true,
+              "permission": {
+                "code": "roles.read"
+              }
+            },
+            {
+              "id": "8",
+              "isActive": true,
+              "permission": {
+                "code": "roles.write"
+              }
+            },
+            {
+              "id": "9",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            },
+            {
+              "id": "10",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.write"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/03-02-configuracion-inicial-administrador.png"
+    },
+    {
+      "title": "02 Configuración inicial CONTADOR",
+      "rule": "Lista vigente del rol CONTADOR.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "2"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "11",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "12",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.write"
+              }
+            },
+            {
+              "id": "13",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.read"
+              }
+            },
+            {
+              "id": "14",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "15",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.write"
+              }
+            },
+            {
+              "id": "16",
+              "isActive": true,
+              "permission": {
+                "code": "roles.read"
+              }
+            },
+            {
+              "id": "17",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            },
+            {
+              "id": "18",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.write"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/04-02-configuracion-inicial-contador.png"
+    },
+    {
+      "title": "02 Configuración inicial CAPTURISTA",
+      "rule": "Lista vigente del rol CAPTURISTA.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "3"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "19",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "20",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "21",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            },
+            {
+              "id": "22",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.write"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/05-02-configuracion-inicial-capturista.png"
+    },
+    {
+      "title": "02 Configuración inicial CONSULTA",
+      "rule": "Lista vigente del rol CONSULTA.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "4"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "23",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "24",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.read"
+              }
+            },
+            {
+              "id": "25",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "26",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/06-02-configuracion-inicial-consulta.png"
+    },
+    {
+      "title": "03 Antes de conceder Cuenta de María",
+      "rule": "El permiso accounts.write se decide por el rol vigente; un rechazo no inserta filas.",
+      "actor": "María",
+      "query": "mutation ($c: ID!, $n: String!, $actor: ID!) {\n  createAccount(\n    input: {companyId: $c, name: $n, accountType: CASH}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    name\n    companyId\n  }\n}",
+      "variables": {
+        "c": "1",
+        "n": "María 03 Antes de conceder 33333e04",
+        "actor": "3"
+      },
+      "expected": "FORBIDDEN",
+      "http": 200,
+      "response": {
+        "data": null,
+        "errors": [
+          {
+            "message": "El rol no tiene el permiso accounts.write.",
+            "locations": [
+              {
+                "line": 2,
+                "column": 3
+              }
+            ],
+            "path": [
+              "createAccount"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN"
+            }
+          }
+        ]
+      },
+      "screenshot": "capturas/07-03-antes-de-conceder-cuenta-de-maria.png",
+      "storage": {
+        "accounts_before": 7,
+        "accounts_after": 7
+      }
+    },
+    {
+      "title": "03 Antes de conceder Cuenta de José",
+      "rule": "El permiso accounts.write se decide por el rol vigente; un rechazo no inserta filas.",
+      "actor": "José",
+      "query": "mutation ($c: ID!, $n: String!, $actor: ID!) {\n  createAccount(\n    input: {companyId: $c, name: $n, accountType: CASH}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    name\n    companyId\n  }\n}",
+      "variables": {
+        "c": "1",
+        "n": "José 03 Antes de conceder 33333e04",
+        "actor": "4"
+      },
+      "expected": "FORBIDDEN",
+      "http": 200,
+      "response": {
+        "data": null,
+        "errors": [
+          {
+            "message": "El rol no tiene el permiso accounts.write.",
+            "locations": [
+              {
+                "line": 2,
+                "column": 3
+              }
+            ],
+            "path": [
+              "createAccount"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN"
+            }
+          }
+        ]
+      },
+      "screenshot": "capturas/08-03-antes-de-conceder-cuenta-de-jose.png",
+      "storage": {
+        "accounts_before": 7,
+        "accounts_after": 7
+      }
+    },
+    {
+      "title": "04 Ana concede accounts.write",
+      "rule": "Un cambio en CAPTURISTA beneficia a sus dos integrantes.",
+      "actor": "Ana",
+      "query": "mutation ($r: ID!, $p: ID!, $actor: ID!) {\n  assignPermissionToRole(\n    input: {roleId: $r, permissionId: $p}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    isActive\n    role {\n      code\n    }\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "3",
+        "p": "4",
+        "actor": "1"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "assignPermissionToRole": {
+            "id": "27",
+            "isActive": true,
+            "role": {
+              "code": "CAPTURISTA"
+            },
+            "permission": {
+              "code": "accounts.write"
+            }
+          }
+        }
+      },
+      "screenshot": "capturas/09-04-ana-concede-accounts-write.png"
+    },
+    {
+      "title": "05 Con permiso Cuenta de María",
+      "rule": "El permiso accounts.write se decide por el rol vigente; un rechazo no inserta filas.",
+      "actor": "María",
+      "query": "mutation ($c: ID!, $n: String!, $actor: ID!) {\n  createAccount(\n    input: {companyId: $c, name: $n, accountType: CASH}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    name\n    companyId\n  }\n}",
+      "variables": {
+        "c": "1",
+        "n": "María 05 Con permiso 33333e04",
+        "actor": "3"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "createAccount": {
+            "id": "8",
+            "name": "María 05 Con permiso 33333e04",
+            "companyId": "1"
+          }
+        }
+      },
+      "screenshot": "capturas/10-05-con-permiso-cuenta-de-maria.png",
+      "storage": {
+        "accounts_before": 7,
+        "accounts_after": 8
+      }
+    },
+    {
+      "title": "05 Con permiso Cuenta de José",
+      "rule": "El permiso accounts.write se decide por el rol vigente; un rechazo no inserta filas.",
+      "actor": "José",
+      "query": "mutation ($c: ID!, $n: String!, $actor: ID!) {\n  createAccount(\n    input: {companyId: $c, name: $n, accountType: CASH}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    name\n    companyId\n  }\n}",
+      "variables": {
+        "c": "1",
+        "n": "José 05 Con permiso 33333e04",
+        "actor": "4"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "createAccount": {
+            "id": "9",
+            "name": "José 05 Con permiso 33333e04",
+            "companyId": "1"
+          }
+        }
+      },
+      "screenshot": "capturas/11-05-con-permiso-cuenta-de-jose.png",
+      "storage": {
+        "accounts_before": 8,
+        "accounts_after": 9
+      }
+    },
+    {
+      "title": "06 Ana quita accounts.write",
+      "rule": "Quitar un permiso desactiva la pareja y conserva el ID.",
+      "actor": "Ana",
+      "query": "mutation ($r: ID!, $p: ID!, $actor: ID!) {\n  removePermissionFromRole(\n    input: {roleId: $r, permissionId: $p}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    isActive\n    role {\n      code\n    }\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "3",
+        "p": "4",
+        "actor": "1"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "removePermissionFromRole": {
+            "id": "27",
+            "isActive": false,
+            "role": {
+              "code": "CAPTURISTA"
+            },
+            "permission": {
+              "code": "accounts.write"
+            }
+          }
+        }
+      },
+      "screenshot": "capturas/12-06-ana-quita-accounts-write.png",
+      "storage": {
+        "role_permission_id": 27,
+        "is_active": false,
+        "row_preserved": true
+      }
+    },
+    {
+      "title": "07 Tras quitar permiso Cuenta de María",
+      "rule": "El permiso accounts.write se decide por el rol vigente; un rechazo no inserta filas.",
+      "actor": "María",
+      "query": "mutation ($c: ID!, $n: String!, $actor: ID!) {\n  createAccount(\n    input: {companyId: $c, name: $n, accountType: CASH}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    name\n    companyId\n  }\n}",
+      "variables": {
+        "c": "1",
+        "n": "María 07 Tras quitar permiso 33333e04",
+        "actor": "3"
+      },
+      "expected": "FORBIDDEN",
+      "http": 200,
+      "response": {
+        "data": null,
+        "errors": [
+          {
+            "message": "El rol no tiene el permiso accounts.write.",
+            "locations": [
+              {
+                "line": 2,
+                "column": 3
+              }
+            ],
+            "path": [
+              "createAccount"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN"
+            }
+          }
+        ]
+      },
+      "screenshot": "capturas/13-07-tras-quitar-permiso-cuenta-de-maria.png",
+      "storage": {
+        "accounts_before": 9,
+        "accounts_after": 9
+      }
+    },
+    {
+      "title": "07 Tras quitar permiso Cuenta de José",
+      "rule": "El permiso accounts.write se decide por el rol vigente; un rechazo no inserta filas.",
+      "actor": "José",
+      "query": "mutation ($c: ID!, $n: String!, $actor: ID!) {\n  createAccount(\n    input: {companyId: $c, name: $n, accountType: CASH}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    name\n    companyId\n  }\n}",
+      "variables": {
+        "c": "1",
+        "n": "José 07 Tras quitar permiso 33333e04",
+        "actor": "4"
+      },
+      "expected": "FORBIDDEN",
+      "http": 200,
+      "response": {
+        "data": null,
+        "errors": [
+          {
+            "message": "El rol no tiene el permiso accounts.write.",
+            "locations": [
+              {
+                "line": 2,
+                "column": 3
+              }
+            ],
+            "path": [
+              "createAccount"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN"
+            }
+          }
+        ]
+      },
+      "screenshot": "capturas/14-07-tras-quitar-permiso-cuenta-de-jose.png",
+      "storage": {
+        "accounts_before": 9,
+        "accounts_after": 9
+      }
+    },
+    {
+      "title": "08 Pedro como CONSULTA",
+      "rule": "CONSULTA no tiene transactions.write; el rechazo no crea movimientos.",
+      "actor": "Pedro",
+      "query": "mutation ($a: ID!, $c: ID!, $actor: ID!) {\n  createTransaction(\n    input: {accountId: $a, conceptId: $c, transactionType: INCOME, amount: \"125.50\"}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    amount\n    capturedBy\n  }\n}",
+      "variables": {
+        "a": "1",
+        "c": "1",
+        "actor": "5"
+      },
+      "expected": "FORBIDDEN",
+      "http": 200,
+      "response": {
+        "data": null,
+        "errors": [
+          {
+            "message": "El rol no tiene el permiso transactions.write.",
+            "locations": [
+              {
+                "line": 2,
+                "column": 3
+              }
+            ],
+            "path": [
+              "createTransaction"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN"
+            }
+          }
+        ]
+      },
+      "screenshot": "capturas/15-08-pedro-como-consulta.png",
+      "storage": {
+        "transactions_before": 2,
+        "transactions_after": 2
+      }
+    },
+    {
+      "title": "09 Ana cambia el puesto de Pedro",
+      "rule": "assignRole deja un solo rol activo y conserva el anterior inactivo.",
+      "actor": "Ana",
+      "query": "mutation ($u: ID!, $r: ID!, $actor: ID!) {\n  assignRole(input: {companyUserId: $u, roleId: $r}, actorCompanyUserId: $actor) {\n    id\n    isActive\n    role {\n      code\n    }\n  }\n}",
+      "variables": {
+        "u": "5",
+        "r": "3",
+        "actor": "1"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "assignRole": {
+            "id": "6",
+            "isActive": true,
+            "role": {
+              "code": "CAPTURISTA"
+            }
+          }
+        }
+      },
+      "screenshot": "capturas/16-09-ana-cambia-el-puesto-de-pedro.png"
+    },
+    {
+      "title": "10 Pedro como CAPTURISTA",
+      "rule": "El mismo token recibe los permisos del nuevo rol.",
+      "actor": "Pedro",
+      "query": "mutation ($a: ID!, $c: ID!, $actor: ID!) {\n  createTransaction(\n    input: {accountId: $a, conceptId: $c, transactionType: INCOME, amount: \"125.50\"}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    amount\n    capturedBy\n  }\n}",
+      "variables": {
+        "a": "1",
+        "c": "1",
+        "actor": "5"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "createTransaction": {
+            "id": "3",
+            "amount": "125.50",
+            "capturedBy": "5"
+          }
+        }
+      },
+      "screenshot": "capturas/17-10-pedro-como-capturista.png"
+    },
+    {
+      "title": "11 Historial de Pedro",
+      "rule": "Pedro tiene CAPTURISTA activo y CONSULTA inactivo.",
+      "actor": "Ana",
+      "query": "query ($u: ID!) {\n  companyUserRoles(companyUserId: $u, activeOnly: false) {\n    id\n    isActive\n    role {\n      code\n    }\n  }\n}",
+      "variables": {
+        "u": "5"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "companyUserRoles": [
+            {
+              "id": "6",
+              "isActive": true,
+              "role": {
+                "code": "CAPTURISTA"
+              }
+            },
+            {
+              "id": "7",
+              "isActive": false,
+              "role": {
+                "code": "CONSULTA"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/18-11-historial-de-pedro.png"
+    },
+    {
+      "title": "12 Contador sin cambios",
+      "rule": "Lista vigente del rol CONTADOR.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "2"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "11",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "12",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.write"
+              }
+            },
+            {
+              "id": "13",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.read"
+              }
+            },
+            {
+              "id": "14",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "15",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.write"
+              }
+            },
+            {
+              "id": "16",
+              "isActive": true,
+              "permission": {
+                "code": "roles.read"
+              }
+            },
+            {
+              "id": "17",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            },
+            {
+              "id": "18",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.write"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/19-12-contador-sin-cambios.png"
+    },
+    {
+      "title": "13 Consulta sin cambios",
+      "rule": "Lista vigente del rol CONSULTA.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "4"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "23",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "24",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.read"
+              }
+            },
+            {
+              "id": "25",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "26",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/20-13-consulta-sin-cambios.png"
+    },
+    {
+      "title": "14 Contador conserva escritura Cuenta de Luis",
+      "rule": "El permiso accounts.write se decide por el rol vigente; un rechazo no inserta filas.",
+      "actor": "Luis",
+      "query": "mutation ($c: ID!, $n: String!, $actor: ID!) {\n  createAccount(\n    input: {companyId: $c, name: $n, accountType: CASH}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    name\n    companyId\n  }\n}",
+      "variables": {
+        "c": "1",
+        "n": "Luis 14 Contador conserva escritura 33333e04",
+        "actor": "2"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "createAccount": {
+            "id": "10",
+            "name": "Luis 14 Contador conserva escritura 33333e04",
+            "companyId": "1"
+          }
+        }
+      },
+      "screenshot": "capturas/21-14-contador-conserva-escritura-cuenta-de-luis.png",
+      "storage": {
+        "accounts_before": 9,
+        "accounts_after": 10
+      }
+    },
+    {
+      "title": "15 José intenta configurar permisos",
+      "rule": "Sin roles.write no se cambia la lista ni se inserta la pareja.",
+      "actor": "José",
+      "query": "mutation ($r: ID!, $p: ID!, $actor: ID!) {\n  assignPermissionToRole(\n    input: {roleId: $r, permissionId: $p}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    isActive\n    role {\n      code\n    }\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "4",
+        "p": "6",
+        "actor": "1"
+      },
+      "expected": "FORBIDDEN",
+      "http": 200,
+      "response": {
+        "data": null,
+        "errors": [
+          {
+            "message": "El rol no tiene el permiso roles.write.",
+            "locations": [
+              {
+                "line": 2,
+                "column": 3
+              }
+            ],
+            "path": [
+              "assignPermissionToRole"
+            ],
+            "extensions": {
+              "code": "FORBIDDEN"
+            }
+          }
+        ]
+      },
+      "screenshot": "capturas/22-15-jose-intenta-configurar-permisos.png",
+      "storage": {
+        "role_permissions_before": 28,
+        "role_permissions_after": 28
+      }
+    },
+    {
+      "title": "16 Ana agrega concepts.write a CONSULTA",
+      "rule": "Con roles.write la misma operación sí se permite.",
+      "actor": "Ana",
+      "query": "mutation ($r: ID!, $p: ID!, $actor: ID!) {\n  assignPermissionToRole(\n    input: {roleId: $r, permissionId: $p}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    isActive\n    role {\n      code\n    }\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "4",
+        "p": "6",
+        "actor": "1"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "assignPermissionToRole": {
+            "id": "28",
+            "isActive": true,
+            "role": {
+              "code": "CONSULTA"
+            },
+            "permission": {
+              "code": "concepts.write"
+            }
+          }
+        }
+      },
+      "screenshot": "capturas/23-16-ana-agrega-concepts-write-a-consulta.png"
+    },
+    {
+      "title": "17 Ana restaura CONSULTA",
+      "rule": "La pareja queda inactiva y CONSULTA vuelve a ser de lectura.",
+      "actor": "Ana",
+      "query": "mutation ($r: ID!, $p: ID!, $actor: ID!) {\n  removePermissionFromRole(\n    input: {roleId: $r, permissionId: $p}\n    actorCompanyUserId: $actor\n  ) {\n    id\n    isActive\n    role {\n      code\n    }\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "4",
+        "p": "6",
+        "actor": "1"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "removePermissionFromRole": {
+            "id": "28",
+            "isActive": false,
+            "role": {
+              "code": "CONSULTA"
+            },
+            "permission": {
+              "code": "concepts.write"
+            }
+          }
+        }
+      },
+      "screenshot": "capturas/24-17-ana-restaura-consulta.png"
+    },
+    {
+      "title": "18 Matriz final ADMINISTRADOR",
+      "rule": "Lista vigente del rol ADMINISTRADOR.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "1"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "1",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "2",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.write"
+              }
+            },
+            {
+              "id": "3",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.read"
+              }
+            },
+            {
+              "id": "4",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.write"
+              }
+            },
+            {
+              "id": "5",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "6",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.write"
+              }
+            },
+            {
+              "id": "7",
+              "isActive": true,
+              "permission": {
+                "code": "roles.read"
+              }
+            },
+            {
+              "id": "8",
+              "isActive": true,
+              "permission": {
+                "code": "roles.write"
+              }
+            },
+            {
+              "id": "9",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            },
+            {
+              "id": "10",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.write"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/25-18-matriz-final-administrador.png"
+    },
+    {
+      "title": "18 Matriz final CONTADOR",
+      "rule": "Lista vigente del rol CONTADOR.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "2"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "11",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "12",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.write"
+              }
+            },
+            {
+              "id": "13",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.read"
+              }
+            },
+            {
+              "id": "14",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "15",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.write"
+              }
+            },
+            {
+              "id": "16",
+              "isActive": true,
+              "permission": {
+                "code": "roles.read"
+              }
+            },
+            {
+              "id": "17",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            },
+            {
+              "id": "18",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.write"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/26-18-matriz-final-contador.png"
+    },
+    {
+      "title": "18 Matriz final CAPTURISTA",
+      "rule": "Lista vigente del rol CAPTURISTA.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "3"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "19",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "20",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "21",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            },
+            {
+              "id": "22",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.write"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/27-18-matriz-final-capturista.png"
+    },
+    {
+      "title": "18 Matriz final CONSULTA",
+      "rule": "Lista vigente del rol CONSULTA.",
+      "actor": "Ana",
+      "query": "query ($r: ID!) {\n  rolePermissions(roleId: $r) {\n    id\n    isActive\n    permission {\n      code\n    }\n  }\n}",
+      "variables": {
+        "r": "4"
+      },
+      "expected": "OK",
+      "http": 200,
+      "response": {
+        "data": {
+          "rolePermissions": [
+            {
+              "id": "23",
+              "isActive": true,
+              "permission": {
+                "code": "accounts.read"
+              }
+            },
+            {
+              "id": "24",
+              "isActive": true,
+              "permission": {
+                "code": "company.users.read"
+              }
+            },
+            {
+              "id": "25",
+              "isActive": true,
+              "permission": {
+                "code": "concepts.read"
+              }
+            },
+            {
+              "id": "26",
+              "isActive": true,
+              "permission": {
+                "code": "transactions.read"
+              }
+            }
+          ]
+        }
+      },
+      "screenshot": "capturas/28-18-matriz-final-consulta.png"
+    }
+  ],
+  "final_select": "SELECT r.code AS rol, p.code AS permiso, rp.is_active\nFROM role_permissions rp\nJOIN roles r ON r.id = rp.role_id\nJOIN permissions p ON p.id = rp.permission_id\nWHERE r.company_id = :company_id\nORDER BY r.code, p.code",
+  "final_rows": [
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "accounts.read",
+      "is_active": 1
+    },
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "accounts.write",
+      "is_active": 1
+    },
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "company.users.read",
+      "is_active": 1
+    },
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "company.users.write",
+      "is_active": 1
+    },
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "concepts.read",
+      "is_active": 1
+    },
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "concepts.write",
+      "is_active": 1
+    },
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "roles.read",
+      "is_active": 1
+    },
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "roles.write",
+      "is_active": 1
+    },
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "transactions.read",
+      "is_active": 1
+    },
+    {
+      "rol": "ADMINISTRADOR",
+      "permiso": "transactions.write",
+      "is_active": 1
+    },
+    {
+      "rol": "CAPTURISTA",
+      "permiso": "accounts.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CAPTURISTA",
+      "permiso": "accounts.write",
+      "is_active": 0
+    },
+    {
+      "rol": "CAPTURISTA",
+      "permiso": "concepts.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CAPTURISTA",
+      "permiso": "transactions.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CAPTURISTA",
+      "permiso": "transactions.write",
+      "is_active": 1
+    },
+    {
+      "rol": "CONSULTA",
+      "permiso": "accounts.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CONSULTA",
+      "permiso": "company.users.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CONSULTA",
+      "permiso": "concepts.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CONSULTA",
+      "permiso": "concepts.write",
+      "is_active": 0
+    },
+    {
+      "rol": "CONSULTA",
+      "permiso": "transactions.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CONTADOR",
+      "permiso": "accounts.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CONTADOR",
+      "permiso": "accounts.write",
+      "is_active": 1
+    },
+    {
+      "rol": "CONTADOR",
+      "permiso": "company.users.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CONTADOR",
+      "permiso": "concepts.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CONTADOR",
+      "permiso": "concepts.write",
+      "is_active": 1
+    },
+    {
+      "rol": "CONTADOR",
+      "permiso": "roles.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CONTADOR",
+      "permiso": "transactions.read",
+      "is_active": 1
+    },
+    {
+      "rol": "CONTADOR",
+      "permiso": "transactions.write",
+      "is_active": 1
+    }
+  ]
+}

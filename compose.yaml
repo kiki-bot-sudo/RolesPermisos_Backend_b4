@@ -1,0 +1,32 @@
+name: ingresos-roles-u2
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Ejecuta app.init_docker}
+      MYSQL_USER: ${MYSQL_USER:?Ejecuta app.init_docker}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Ejecuta app.init_docker}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Ejecuta app.init_docker}
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_bin"]
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  api:
+    build: .
+    environment:
+      DATABASE_URL: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}?charset=utf8mb4
+      JWT_SECRET: ${JWT_SECRET:?Ejecuta app.init_docker}
+      BOOTSTRAP_KEY: ${BOOTSTRAP_KEY:?Ejecuta app.init_docker}
+    ports:
+      - "127.0.0.1:8008:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+volumes:
+  mysql_data:

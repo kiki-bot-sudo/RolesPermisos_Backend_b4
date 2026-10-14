@@ -1,0 +1,277 @@
+type Account {
+  id: ID!
+  companyId: ID!
+  accountType: AccountType!
+  name: String!
+  bankName: String
+  accountNumber: String
+  clabe: String
+  cardLastDigits: String
+  shortDescription: String
+  longDescription: String
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+  company: Company!
+}
+
+type AccountConcept {
+  id: ID!
+  accountId: ID!
+  conceptId: ID!
+  isActive: Boolean!
+  createdAt: Time!
+  account: Account!
+  concept: Concept!
+}
+
+enum AccountType {
+  DEBIT
+  CREDIT
+  CASH
+  SAVINGS
+  INVESTMENT
+  WALLET
+  OTHER
+}
+
+input AssignConceptToAccountInput {
+  accountId: ID!
+  conceptId: ID!
+}
+
+input AssignPermissionToRoleInput {
+  roleId: ID!
+  permissionId: ID!
+}
+
+input AssignRoleInput {
+  companyUserId: ID!
+  roleId: ID!
+}
+
+type AuthPayload {
+  token: String!
+  tokenType: String!
+  user: AuthUser!
+}
+
+type AuthUser {
+  id: ID!
+  name: String!
+  email: String!
+}
+
+type Company {
+  id: ID!
+  name: String!
+  legalName: String
+  taxId: String
+  email: String
+  phone: String
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type CompanyUser {
+  id: ID!
+  companyId: ID!
+  userId: ID!
+  isAdmin: Boolean!
+  isActive: Boolean!
+  joinedAt: Time!
+  company: Company!
+  user: User!
+}
+
+type CompanyUserRole {
+  id: ID!
+  companyUserId: ID!
+  roleId: ID!
+  isActive: Boolean!
+  createdAt: Time!
+  role: Role!
+}
+
+type Concept {
+  id: ID!
+  companyId: ID!
+  conceptType: ConceptType!
+  name: String!
+  shortDescription: String
+  longDescription: String
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+enum ConceptType {
+  INCOME
+  EXPENSE
+}
+
+input CreateAccountInput {
+  companyId: ID!
+  accountType: AccountType!
+  name: String!
+  bankName: String
+  accountNumber: String
+  clabe: String
+  cardLastDigits: String
+  shortDescription: String
+  longDescription: String
+}
+
+input CreateCompanyAdminInput {
+  companyId: ID!
+  name: String!
+  email: String!
+  password: String!
+}
+
+input CreateCompanyInput {
+  name: String!
+  legalName: String
+  taxId: String
+  email: String
+  phone: String
+}
+
+input CreateCompanyUserInput {
+  companyId: ID!
+  name: String!
+  email: String!
+  password: String!
+}
+
+input CreateConceptInput {
+  companyId: ID!
+  conceptType: ConceptType!
+  name: String!
+  shortDescription: String
+  longDescription: String
+}
+
+input CreateTransactionInput {
+  accountId: ID!
+  conceptId: ID!
+  transactionType: TransactionType!
+  amount: Decimal!
+  transactionDate: Time
+  shortDescription: String
+  longDescription: String
+}
+
+scalar Decimal
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createAccount(input: CreateAccountInput!, actorCompanyUserId: ID = null): Account!
+  createConcept(input: CreateConceptInput!, actorCompanyUserId: ID = null): Concept!
+  assignConceptToAccount(input: AssignConceptToAccountInput!, actorCompanyUserId: ID = null): AccountConcept!
+  removeConceptFromAccount(accountId: ID!, conceptId: ID!, actorCompanyUserId: ID = null): Boolean!
+  createTransaction(input: CreateTransactionInput!, actorCompanyUserId: ID = null): Transaction!
+  deleteTransaction(id: ID!, actorCompanyUserId: ID = null): Transaction!
+  assignPermissionToRole(input: AssignPermissionToRoleInput!, actorCompanyUserId: ID = null): RolePermission!
+  removePermissionFromRole(input: AssignPermissionToRoleInput!, actorCompanyUserId: ID = null): RolePermission!
+  assignRole(input: AssignRoleInput!, actorCompanyUserId: ID = null): CompanyUserRole!
+  createCompany(input: CreateCompanyInput!): Company!
+  updateCompany(input: UpdateCompanyInput!): Company!
+  deactivateCompany(id: ID!): Company!
+  createCompanyAdmin(input: CreateCompanyAdminInput!): CompanyUser!
+  createCompanyUser(input: CreateCompanyUserInput!, actorCompanyUserId: ID = null): CompanyUser!
+  deactivateCompanyUser(id: ID!, actorCompanyUserId: ID = null): CompanyUser!
+  login(input: LoginInput!): AuthPayload!
+}
+
+type Permission {
+  id: ID!
+  code: String!
+  name: String!
+}
+
+type Query {
+  accounts(companyId: ID!, accountType: AccountType, activeOnly: Boolean, actorCompanyUserId: ID = null): [Account!]!
+  concepts(companyId: ID!, conceptType: ConceptType, activeOnly: Boolean, actorCompanyUserId: ID = null): [Concept!]!
+  accountConcepts(accountId: ID!, actorCompanyUserId: ID = null): [AccountConcept!]!
+  transactions(accountId: ID, transactionType: TransactionType, limit: Int, offset: Int, actorCompanyUserId: ID = null): [Transaction!]!
+
+  """Extensión: ingresos activos menos egresos activos, sin paginación."""
+  accountBalance(accountId: ID!, actorCompanyUserId: ID = null): Decimal!
+  roles(companyId: ID = null, actorCompanyUserId: ID = null): [Role!]!
+  permissions(companyId: ID = null, actorCompanyUserId: ID = null): [Permission!]!
+  rolePermissions(roleId: ID!, activeOnly: Boolean! = true, actorCompanyUserId: ID = null): [RolePermission!]!
+  companyUserRoles(companyUserId: ID!, activeOnly: Boolean! = true, actorCompanyUserId: ID = null): [CompanyUserRole!]!
+  companies(activeOnly: Boolean): [Company!]!
+  company(id: ID!): Company
+  companyUsers(companyId: ID!, actorCompanyUserId: ID = null): [CompanyUser!]!
+}
+
+type Role {
+  id: ID!
+  companyId: ID!
+  code: String!
+  name: String!
+  isActive: Boolean!
+}
+
+type RolePermission {
+  id: ID!
+  roleId: ID!
+  permissionId: ID!
+  isActive: Boolean!
+  createdAt: Time!
+  role: Role!
+  permission: Permission!
+}
+
+scalar Time
+
+type Transaction {
+  id: ID!
+  accountId: ID!
+  conceptId: ID!
+  transactionType: TransactionType!
+  amount: Decimal!
+  transactionDate: Time!
+  capturedAt: Time!
+  capturedBy: ID!
+  shortDescription: String
+  longDescription: String
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+  account: Account!
+  concept: Concept!
+  capturedByUser: User!
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+input UpdateCompanyInput {
+  id: ID!
+  name: String
+  legalName: String
+  taxId: String
+  email: String
+  phone: String
+  isActive: Boolean
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  emailVerified: Boolean!
+  isActive: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+}

@@ -1,0 +1,9 @@
+{
+  "database": "mysql",
+  "server": "8.4.11",
+  "roles": 4,
+  "permissions": 10,
+  "company_user_roles": 7,
+  "admin_unique_index": true,
+  "status": "PASS"
+}

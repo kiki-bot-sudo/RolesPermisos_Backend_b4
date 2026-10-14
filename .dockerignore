@@ -1,0 +1,13 @@
+env
+.venv
+.env*
+*.db*
+.*credentials*.json
+.roles-demo.json
+.roles-demo.mysql.json
+__pycache__
+.pytest_cache
+tmp
+entrega
+docs
+tests
